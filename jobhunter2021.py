@@ -75,11 +75,16 @@ def add_or_delete_job(jobpage, cursor):
         check_if_job_exists(cursor, jobdetails)
         is_job_found = len(cursor.fetchall()) > 0  # https://stackoverflow.com/questions/2511679/python-number-of-rows-affected-by-cursor-executeselect
         if is_job_found:
-            print("Job Found: " + "JobID: " + str(jobdetails['id'])+ " " + jobdetails['title'])
+            if (now - job_date).days > 30:
+                print("Delete job: " +
+                      jobdetails["title"])
+                delete_job(cursor, jobdetails)
+            else:
+                print("Job Found: " + "JobID: " + str(jobdetails['id'])+ " " + jobdetails['title'])
         else:
             # INSERT JOB
             # Add in your code here to notify the user of a new posting. This code will notify the new user
-            now = date.now()
+            now = date.today()
             job_date = date.fromisoformat(jobdetails['publication_date'][0:10])
             if (now - job_date).days > 30:
                 print("Delete job: " +
