@@ -8,7 +8,7 @@ import html2text
 # You may need to edit the connect function based on your local settings.#I made a password for my database because it is important to do so. Also make sure MySQL server is running or it will not connect
 def connect_to_sql():
     conn = mysql.connector.connect(user='root', password='',
-                                   host='127.0.0.1', database='cna330')
+                                   host='127.0.0.1', database='cne340')
     return conn
 
 # Create the table structure
@@ -16,7 +16,8 @@ def create_tables(cursor):
     # Creates table
     # Must set Title to CHARSET utf8 unicode Source: http://mysql.rjweb.org/doc.php/charcoll.
     # Python is in latin-1 and error (Incorrect string value: '\xE2\x80\xAFAbi...') will occur if Description is not in unicode format due to the json data
-    cursor.execute('''CREATE TABLE IF NOT EXISTS jobs (id INT PRIMARY KEY auto_increment, Job_id varchar(50) , url varchar(30000), Title LONGBLOB, Description LONGBLOB ); ''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS jobs (id INT PRIMARY KEY auto_increment, Job_id varchar(50) , 
+    company varchar (300), Created_at DATE, url varchar(30000), Title LONGBLOB, Description LONGBLOB ); ''')
     return
 
 # Query the database.
@@ -32,8 +33,10 @@ def add_new_job(cursor, jobdetails):
     URL = jobdetails['url']
     job_id = jobdetails['id']
     title = jobdetails['title']
-    query = cursor.execute("INSERT INTO jobs( url, Job_id, Title, Description " ") "
-               "VALUES(%s,%s,%s, %s)", ( URL, job_id,title, description))  # %s is what is needed for Mysqlconnector as SQLite3 uses ? the Mysqlconnector uses %s
+    date = jobdetails['publication_date']
+    company = jobdetails['company_name']
+    query = cursor.execute("INSERT INTO jobs( url, Job_id, Title, Description, Created_at, company " ") "
+               "VALUES(%s,%s,%s, %s, %s, %s)", ( URL, job_id,title, description, date, company))  # %s is what is needed for Mysqlconnector as SQLite3 uses ? the Mysqlconnector uses %s
     return query_sql(cursor, query)
 
 # Check if new job
@@ -71,9 +74,6 @@ def add_or_delete_job(jobpage, cursor):
         check_if_job_exists(cursor, jobdetails)
         is_job_found = len(cursor.fetchall()) > 0  # https://stackoverflow.com/questions/2511679/python-number-of-rows-affected-by-cursor-executeselect
         if is_job_found:
-            # DELETE JOB
-            # EXTRA CREDIT: Add your code to delete old entries
-            now = datetime.now()
             print("Job Found: " + "JobID: " + str(jobdetails['id'])+ " " + jobdetails['title'])
         else:
             # INSERT JOB
@@ -89,7 +89,6 @@ def main():
     conn = connect_to_sql()
     cursor = conn.cursor()
     create_tables(cursor)
-    # Load text file and store arguments into dictionary
 
     while(1):  # Infinite Loops. Only way to kill it is to crash or manually crash it. We did this as a background process/passive scraper
         jobhunt( cursor)  # arg_dict is argument dictionary,

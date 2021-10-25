@@ -1,6 +1,6 @@
 import mysql.connector
 import json
-import urllib.request
+import requests
 import time
 from urllib.request import Request, urlopen
 
@@ -9,7 +9,7 @@ def connect_to_sql():
                                   host='127.0.0.1',
                                   database='fantasy_football')
     return conn
-def create_tables(cursor, table):
+def create_tables(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS fantasy (id INT PRIMARY KEY auto_increment,playername varchar(100), position text CHARSET utf8, points varchar(100)); ''')
     return
 def query_sql(cursor, query):
@@ -32,18 +32,14 @@ def delete_player(cursor, playerdetails):
     playername = playerdetails['player_name']
     query = "DELETE FROM fantasy WHERE playername = \"%s\"" % playername
     return query_sql(cursor, query)
-def fetch_new_players(arg_dict):
-    query = Request('https://www.fantasyfootballdatapros.com/api/players/2019/1', headers={'User-Agent': 'Mozilla/5.0'})
-    jsonpage = 0
-    try:
-        contents = urllib.request.urlopen(query)
-        response = contents.read()  # Loads from config file
-        jsonpage = json.loads(response) # checks database, any jobs that find
-    except:
-        pass
-    return jsonpage
-def playerhunt(arg_dict, cursor):
-    playerpage = fetch_new_players(arg_dict)
+def fetch_new_players():
+    query = requests.get('https://www.fantasyfootballdatapros.com/api/players/2019/1', headers={'User-Agent': 'Mozilla/5.0'})
+    datas = json.loads(query.text)
+
+    return datas
+
+def playerhunt(cursor):
+    playerpage = fetch_new_players()
     add_or_delete_player( playerpage, cursor)
 def add_or_delete_player( playerpage, cursor):
     # Add your code here to parse the job page
@@ -61,11 +57,10 @@ def main():
     # Connect to SQL and get cursor
     conn = connect_to_sql()
     cursor = conn.cursor()
-    create_tables(cursor, "table")
+    create_tables(cursor)
     # Load text file and store arguments into dictionary
-    arg_dict = 0
     while(1):  # Infinite Loops. Only way to kill it is to crash or manually crash it. We did this as a background process/passive scraper
-        playerhunt(arg_dict, cursor)  # arg_dict is argument dictionary,
+        playerhunt( cursor)  # arg_dict is argument dictionary,
         time.sleep(3600)  # Sleep for 1h, this is ran every hour because API or web interfaces have request limits. Your reqest will get blocked.
 # Sleep does a rough cycle count, system is not entirely accurate
 # If you want to test if script works change time.sleep() to 10 seconds and delete your table in MySQL
