@@ -84,7 +84,7 @@ def add_or_delete_job(jobpage, cursor):
         else:
             # INSERT JOB
             # Add in your code here to notify the user of a new posting. This code will notify the new user
-            now = date.today()
+            now = date.today()#https://docs.python.org/3/library/datetime.html
             job_date = date.fromisoformat(jobdetails['publication_date'][0:10])
             if (now - job_date).days > 30:
                 print("Delete job: " +
