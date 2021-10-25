@@ -2,6 +2,7 @@ import mysql.connector
 import time
 import json
 import requests
+from datetime import date
 from datetime import datetime
 import html2text
 # Connect to database
@@ -33,7 +34,7 @@ def add_new_job(cursor, jobdetails):
     URL = jobdetails['url']
     job_id = jobdetails['id']
     title = jobdetails['title']
-    date = jobdetails['publication_date']
+    date = jobdetails['publication_date'][0:10]
     company = jobdetails['company_name']
     query = cursor.execute("INSERT INTO jobs( url, Job_id, Title, Description, Created_at, company " ") "
                "VALUES(%s,%s,%s, %s, %s, %s)", ( URL, job_id,title, description, date, company))  # %s is what is needed for Mysqlconnector as SQLite3 uses ? the Mysqlconnector uses %s
@@ -78,8 +79,15 @@ def add_or_delete_job(jobpage, cursor):
         else:
             # INSERT JOB
             # Add in your code here to notify the user of a new posting. This code will notify the new user
-            print("New job is found: " + "JobID: " + str(jobdetails['id']) + " " + jobdetails['title'])
-            add_new_job(cursor, jobdetails)
+            now = date.now()
+            job_date = date.fromisoformat(jobdetails['publication_date'][0:10])
+            if (now - job_date).days > 30:
+                print("Delete job: " +
+                      jobdetails["title"])
+                delete_job(cursor, jobdetails)
+            else:
+                print("New job is found: " + "JobID: " + str(jobdetails['id']) + " " + jobdetails['title'])
+                add_new_job(cursor, jobdetails)
 
 # Setup portion of the program. Take arguments and set up the script
 # You should not need to edit anything here.
