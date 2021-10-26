@@ -3,7 +3,8 @@ import time
 import json
 import requests
 from datetime import date
-from datetime import datetime
+import smtplib
+from email.mime.text import MIMEText
 import html2text
 # Connect to database
 # You may need to edit the connect function based on your local settings.#I made a password for my database because it is important to do so. Also make sure MySQL server is running or it will not connect
@@ -63,9 +64,9 @@ def fetch_new_jobs():
 # Main area of the code.
 def jobhunt( cursor):
     # Fetch jobs from website
-    jobpage = fetch_new_jobs()  # Gets API website and holds the json data in it as a list
+    jobpage = fetch_new_jobs()  # Gets github website and holds the json data in it as a list
     # use below print statement to view list in json format
-    #print(jobpage)
+    # print(jobpage)
     add_or_delete_job(jobpage, cursor)
 
 def add_or_delete_job(jobpage, cursor):
@@ -75,20 +76,32 @@ def add_or_delete_job(jobpage, cursor):
         check_if_job_exists(cursor, jobdetails)
         is_job_found = len(cursor.fetchall()) > 0  # https://stackoverflow.com/questions/2511679/python-number-of-rows-affected-by-cursor-executeselect
         if is_job_found:
-            now = date.today()  # https://docs.python.org/3/library/datetime.html
+            # INSERT JOB
+            # Add in your code here to notify the user of a new posting. This code will notify the new user
+            now = date.today()
             job_date = date.fromisoformat(jobdetails['publication_date'][0:10])
-            if (now - job_date).days > 14:
+            if (now - job_date).days > 7:
                 delete_job(cursor, jobdetails)
-
         else:
             # INSERT JOB
             # Add in your code here to notify the user of a new posting. This code will notify the new user
-            now = date.today()#https://docs.python.org/3/library/datetime.html
+            now = date.today()
             job_date = date.fromisoformat(jobdetails['publication_date'][0:10])
-            if (now - job_date).days > 14:
+
+            if (now - job_date).days > 7:
                 delete_job(cursor, jobdetails)
             else:
                 print("New job is found: " + "JobID: " + str(jobdetails['id']) + " " + jobdetails['title'])
+                server = smtplib.SMTP_SSL('smtp.gmail.com', 465) #https://stackoverflow.com/questions/8856117/how-to-send-email-to-multiple-recipients-using-python-smtplib
+                server.login("pythonemailtest100@gmail.com", "Kona1130*") #https://www.afternerd.com/blog/how-to-send-an-email-using-python-and-smtplib/
+                msg = MIMEText("New job is found: " + "JobID: " + str(jobdetails['id'])+" "+ str(jobdetails['url']))
+                sender = 'pythonemailtest100@gmail.com'
+                recipients = 'pythonemailtest100@gmail.com'
+                msg['Subject'] = "New Job Found"
+                msg['From'] = sender
+                msg['To']=recipients
+                server.sendmail(sender,recipients,msg.as_string())
+                server.quit()
                 add_new_job(cursor, jobdetails)
 
 # Setup portion of the program. Take arguments and set up the script
@@ -101,8 +114,8 @@ def main():
     create_tables(cursor)
 
     while(1):  # Infinite Loops. Only way to kill it is to crash or manually crash it. We did this as a background process/passive scraper
-        jobhunt( cursor)
-        time.sleep(1000)  # Sleep for 1h, this is ran every hour because API or web interfaces have request limits. Your reqest will get blocked.
+        jobhunt( cursor)  # arg_dict is argument dictionary,
+        time.sleep(21600)  # Sleep for 1h, this is ran every hour because API or web interfaces have request limits. Your reqest will get blocked.
 # Sleep does a rough cycle count, system is not entirely accurate
 # If you want to test if script works change time.sleep() to 10 seconds and delete your table in MySQL
 if __name__ == '__main__':
