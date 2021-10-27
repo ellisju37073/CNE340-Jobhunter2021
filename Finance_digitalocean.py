@@ -1,8 +1,6 @@
 from sqlalchemy import create_engine # https://www.geeksforgeeks.org/how-to-convert-pandas-dataframe-into-sql-in-python/
 import pandas as pd
 import requests
-from sqlalchemy.types import VARCHAR
-from datetime import datetime
 
 hostname="147.182.207.57"
 uname="pythoneverything"
