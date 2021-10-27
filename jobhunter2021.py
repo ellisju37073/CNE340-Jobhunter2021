@@ -86,7 +86,7 @@ def add_or_delete_job(jobpage, cursor):
             # INSERT JOB
             # Add in your code here to notify the user of a new posting. This code will notify the new user
             now = date.today()
-            job_date = date.fromisoformat(jobdetails['publication_date'][0:10])
+            job_date = date.fromisoformat(jobdetails['publication_date'][0:10])#https://pythontic.com/datetime/date/fromisoformat#:~:text=The%20class%20method%20fromisoformat%20%28%29%20from%20the%20date,string%20containing%20date%20in%20ISO%20format.%20i.e.%2C%20yyyy-mm-dd.
 
             if (now - job_date).days > 7:
                 delete_job(cursor, jobdetails)
