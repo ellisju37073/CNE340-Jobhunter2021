@@ -6,4 +6,4 @@ pwd="python123"
 
 engine = create_engine("mysql+pymysql://{user}:{pw}@{host}"
             .format(host=hostname, user=uname, pw=pwd))
-engine.execute("Create DATABASE finance")
+engine.execute("Create DATABASE fuel")
