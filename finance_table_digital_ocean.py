@@ -10,7 +10,7 @@ dbname="finance"
 engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
             .format(host=hostname, db=dbname, user=uname, pw=pwd))
 
-df = pd.read_sql_table('lion', engine)
+df = pd.read_sql_table('novo', engine)
 
 print(df)
 

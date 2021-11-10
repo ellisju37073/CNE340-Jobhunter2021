@@ -13,6 +13,6 @@ lion= requests.get(url, headers=header)
 
 dfs_lion = pd.read_html(lion.text, header = 0)
 
-return_table_husky=dfs_lion[0]
+return_table=dfs_lion[0]
 
-print(return_table_husky)
+print(return_table)
