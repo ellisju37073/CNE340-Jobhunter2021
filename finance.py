@@ -17,9 +17,9 @@ connect_str = "mssql+pymssql://username:password@server/database"
 
 import pandas
 
-tables = pandas.read_html('https://finance.yahoo.com/quote/NSRPF/history?p=NSRPF',index_col = 'Date') #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_html.html and https://www.marsja.se/how-to-use-pandas-read_html-to-scrape-data-from-html-tables/
+tables = pandas.read_html('https://finance.yahoo.com/quote/NSRPF/history?p=NSRPF', index_col ='Date') #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_html.html and https://www.marsja.se/how-to-use-pandas-read_html-to-scrape-data-from-html-tables/
 NOVO=tables[0]
-tables_2= pandas.read_html('https://finance.yahoo.com/quote/LOMLF/history?p=LOMLF',index_col = 'Date')
+tables_2= pandas.read_html('https://finance.yahoo.com/quote/LOMLF/history?p=LOMLF', index_col ='Date')
 LION=tables_2[0]
 
 engine = create_engine(connect_str) # This is so the script knows where to connect and append the data to https://docs-sqlalchemy.readthedocs.io/ko/latest/core/engines.html

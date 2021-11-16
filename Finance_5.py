@@ -16,7 +16,7 @@ tables = pandas.read_html('https://finance.yahoo.com/quote/NSRPF/history?p=NSRPF
 NOVO=tables[0]
 NOVO = NOVO.drop(100)
 NOVO = NOVO.drop(0)
-NOVO['Date'] =  pandas.to_datetime(NOVO.iloc[:,0].str.replace(', ','-').str.replace(' ','-'),format='%b-%d-%Y')
+NOVO['Date'] =  pandas.to_datetime(NOVO.iloc[:, 0].str.replace(', ', '-').str.replace(' ', '-'), format='%b-%d-%Y')
 NOVO.set_index('Date', inplace= True)
 NOVO= NOVO.sort_values(by= "Date")
 NOVO["Open"]= NOVO["Open"].astype("float")
@@ -31,11 +31,11 @@ NOVO = NOVO.drop(columns= 'Adjusted Close')
 NOVO["Volume"] = NOVO["Volume"].replace("-",value="0")
 NOVO["Volume"]= NOVO["Volume"].astype("float")
 
-tables_2= pandas.read_html('https://finance.yahoo.com/quote/LOMLF/history?p=LOMLF')
+tables_2= pandas_example.read_html('https://finance.yahoo.com/quote/LOMLF/history?p=LOMLF')
 LION=tables_2[0]
 LION = LION.drop(100)
 LION = LION.drop(0)
-LION['Date'] =  pandas.to_datetime(LION.iloc[:,0].str.replace(', ','-').str.replace(' ','-'),format='%b-%d-%Y') #https://stackoverflow.com/questions/53101655/pandas-time-data-does-not-match-format-error-when-the-string-does-match-the
+LION['Date'] =  pandas_example.to_datetime(LION.iloc[:, 0].str.replace(', ', '-').str.replace(' ', '-'), format='%b-%d-%Y') #https://stackoverflow.com/questions/53101655/pandas-time-data-does-not-match-format-error-when-the-string-does-match-the
 LION.set_index('Date', inplace= True)
 LION= LION.sort_values(by= "Date")
 LION["Open"]= LION["Open"].astype("float")
