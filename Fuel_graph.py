@@ -2,15 +2,15 @@ from sqlalchemy import create_engine # https://www.geeksforgeeks.org/how-to-conv
 import pandas as pd
 from matplotlib import pyplot as plt
 
-hostname="147.182.207.57"
-uname="pythoneverything"
-pwd="python123"
+hostname="161.35.225.132"
+uname="justin"
+pwd="kona"
 dbname="fuel"
 
 engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
             .format(host=hostname, db=dbname, user=uname, pw=pwd))
 
-df = pd.read_sql_table('Fuel', engine)
+df = pd.read_sql_table('fuel', engine)
 
 print(df)
 

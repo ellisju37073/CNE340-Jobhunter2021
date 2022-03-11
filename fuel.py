@@ -1,9 +1,9 @@
 import pandas
 from sqlalchemy import create_engine
 
-hostname="147.182.207.57"
-uname="pythoneverything"
-pwd="python123"
+hostname="161.35.225.132"
+uname="justin"
+pwd="kona"
 dbname="fuel"
 
 
@@ -17,11 +17,11 @@ tables.rename(columns = {'Weekly West Coast (PADD 5) Except California No 2 Dies
                          :'Diesel_Price'}, inplace=True)
 
 connection=engine.connect()
-tables.to_sql('Fuel', con = engine, if_exists = 'append')
+tables.to_sql('fuel', con = engine, if_exists = 'append')
 
-engine.execute('CREATE TABLE Fuel_temp Like Fuel')
-engine.execute('INSERT INTO Fuel_temp SELECT DISTINCT (Date), Diesel_Price FROM Fuel ')
-engine.execute('DROP TABLE Fuel')
-engine.execute('ALTER TABLE Fuel_temp RENAME TO Fuel')
+engine.execute('CREATE TABLE fuel_temp Like fuel')
+engine.execute('INSERT INTO fuel_temp SELECT DISTINCT (Date), Diesel_Price FROM fuel ')
+engine.execute('DROP TABLE fuel')
+engine.execute('ALTER TABLE fuel_temp RENAME TO fuel')
 
 connection.close() #Close extension to database
