@@ -2,7 +2,7 @@ from sqlalchemy import create_engine # https://www.geeksforgeeks.org/how-to-conv
 import pandas as pd
 import requests
 
-hostname="147.182.207.57"
+hostname="164.92.81.46"
 uname="pythoneverything"
 pwd="python123"
 dbname="finance"

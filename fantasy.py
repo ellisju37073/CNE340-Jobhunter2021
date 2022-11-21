@@ -45,6 +45,7 @@ def add_or_delete_player( playerpage, cursor):
     # Add your code here to parse the job page
     for playerdetails in  playerpage:  # EXTRACTS EACH Player from list
         # Add in your code here to check if the player already exists in the DB
+        print(playerdetails)
         check_if_player_exists(cursor, playerdetails)
         is_player_found = len(cursor.fetchall()) > 0  # https://stackoverflow.com/questions/2511679/python-number-of-rows-affected-by-cursor-executeselect
         if is_player_found:
