@@ -3,7 +3,6 @@ import time
 import json
 import requests
 from datetime import date
-import yagmail
 import html2text
 # Connect to database
 # You may need to edit the connect function based on your local settings.#I made a password for my database because it is important to do so. Also make sure MySQL server is running or it will not connect
@@ -88,13 +87,6 @@ def add_or_delete_job(jobpage, cursor):
             if (now - job_date).days < 8:
                 delete_job(cursor)
                 print("New job is found: " + "JobID: " + str(jobdetails['id']) + " " + jobdetails['title'])
-                yag = yagmail.SMTP("pythonemailtest100@gmail.com")  # https://github.com/kootenpv/yagmail
-
-                yag.send(to='pythonemailtest100@gmail.com',
-                         subject="New Job Posting",
-                         contents=("New job is found: " + "JobID: " + str(jobdetails['id']) + " " + str(
-                             jobdetails['url']
-                             + " " + jobdetails['publication_date'])))  # https://mailtrap.io/blog/yagmail-tutorial/
 
                 add_new_job(cursor, jobdetails)
 

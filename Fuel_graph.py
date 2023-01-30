@@ -2,7 +2,7 @@ from sqlalchemy import create_engine # https://www.geeksforgeeks.org/how-to-conv
 import pandas as pd
 from matplotlib import pyplot as plt
 
-hostname="35.89.86.97"
+hostname="52.40.181.64"
 uname="pythoneverything"
 pwd="python123"
 dbname="fuel"

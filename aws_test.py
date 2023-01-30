@@ -1,13 +1,13 @@
 import pandas
 from sqlalchemy import create_engine
 
-hostname="54.184.161.35"
+hostname="52.40.181.64"
 uname="pythoneverything"
 pwd="python123"
 dbname="fuel"
 
 
-engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
+engine = create_engine("mysql+pymysql://{user}:{pw}@{host}:3306/{db}"
             .format(host=hostname, db=dbname, user=uname, pw=pwd))
 
 
