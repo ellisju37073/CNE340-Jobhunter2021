@@ -2,9 +2,9 @@ from sqlalchemy import create_engine # https://www.geeksforgeeks.org/how-to-conv
 import pandas as pd
 from matplotlib import pyplot as plt
 
-hostname="52.40.181.64"
-uname="pythoneverything"
-pwd="python123"
+hostname="161.35.225.132"
+uname="justin"
+pwd="kona"
 dbname="fuel"
 
 engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
